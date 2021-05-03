@@ -15,7 +15,7 @@ Throttling would accept 1 call within a given time period but that wouldn't have
 
 Sample usage:
 ```
-var debouncerUpdate = Debouncer(timeIntervalDebounce: 0.5)
+let debouncerUpdate = Debouncer(timeIntervalDebounce: 0.5)
 
 debouncerUpdate.bounceWithBlock { // Code to do latest updates such as making an API call }
 ```
