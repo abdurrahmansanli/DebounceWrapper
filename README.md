@@ -14,7 +14,8 @@ Why not use Throttling?:
 Throttling would accept 1 call within a given time period but that wouldn't have to necessarily be the last call. By doing an update; we want our chosen call to be the last call. Debouncing sends the last call when it's sure no other calls are going to be made anytime soon.
 
 Sample usage:
-
+```
 var debouncerUpdate = Debouncer(timeIntervalDebounce: 0.5)
 
 debouncerUpdate.bounceWithBlock { // Code to do latest updates such as making an API call }
+```
