@@ -19,3 +19,6 @@ let debouncerUpdate = Debouncer(timeIntervalDebounce: 0.5)
 
 debouncerUpdate.bounceWithBlock { // Code to do latest updates such as making an API call }
 ```
+
+Learn more about debounce - throttle difference in programming here:
+http://demo.nimius.net/debounce_throttle/
