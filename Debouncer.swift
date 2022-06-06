@@ -1,34 +1,45 @@
-class Debouncer {
+import Foundation
+
+protocol DebouncerDelegate: AnyObject {
+    func debounceCodeBlock(blockToDebounce: (() -> Void)?)
+    func cancelScheduledBlock()
+}
+
+final class Debouncer {
+        
+    private var blockToDebounce: (() -> Void)?
     
-    private var blockToRun: (()->Void)?
+    private var debounceInterval: TimeInterval
     
-    private var timeIntervalDebounce: TimeInterval
+    private var debounceTimer: Timer?
     
-    private var timerRunBlockToRun: Timer?
-    
-    init(timeIntervalDebounce: TimeInterval) {
-        self.timeIntervalDebounce = timeIntervalDebounce
-    }
-    
-    func bounceWithBlock(blockToRun: (()->Void)?) {
-        self.blockToRun = blockToRun
-        cancelPreviouslyScheduledBlockAndSetScheduleForNewBlock()
-    }
-    
-    func cancelScheduledBlock() {
-        timerRunBlockToRun?.invalidate()
+    init(debounceInterval: TimeInterval) {
+        self.debounceInterval = debounceInterval
     }
     
     private func cancelPreviouslyScheduledBlockAndSetScheduleForNewBlock() {
         cancelScheduledBlock()
-        timerRunBlockToRun = Timer.scheduledTimer(timeInterval: timeIntervalDebounce,
-                                                  target: self,
-                                                  selector: #selector(runBlockToRun),
-                                                  userInfo: nil,
-                                                  repeats: false)
+        debounceTimer = Timer.scheduledTimer(timeInterval: debounceInterval,
+                                             target: self,
+                                             selector: #selector(runBlockToDebounce),
+                                             userInfo: nil,
+                                             repeats: false)
     }
     
-    @objc private func runBlockToRun() {
-        blockToRun?()
+    @objc
+    private func runBlockToDebounce() {
+        blockToDebounce?()
+    }
+}
+
+extension Debouncer: DebouncerDelegate {
+    
+    func debounceCodeBlock(blockToDebounce: (() -> Void)?) {
+        self.blockToDebounce = blockToDebounce
+        cancelPreviouslyScheduledBlockAndSetScheduleForNewBlock()
+    }
+    
+    func cancelScheduledBlock() {
+        debounceTimer?.invalidate()
     }
 }
